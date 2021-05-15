@@ -1,20 +1,41 @@
 import React from 'react';
+import { MainList } from '../components/MainList'
 
 export class MainView extends React.Component {
   constructor() {
     super();
     this.state = {
-      someKey: 'someValue'
+      lista: []
     };
-  }
-
-  render() {
-    return <p>{this.state.someKey}</p>;
   }
 
   componentDidMount() {
     this.setState({
-      someKey: 'otherValue'
+        lista: localStorage.getItem('puestos') ? JSON.parse(localStorage.getItem('puestos')) : [],
     });
   }
+
+  componentDidUpdate(prevProps, prevState){
+    if(prevState.lista !== this.state.lista){
+        localStorage.setItem("puestos", JSON.stringify(this.state.lista))
+    }
+  }
+
+  deleteLista = (id) => {
+    this.setState({
+      lista: this.state.lista.filter((_, idx) => idx !== id)
+    });
+  }
+
+  render() {
+    return (
+      <div>
+        
+        <MainList lista={this.state.lista} onDeleteLista={this.deleteLista} />
+      
+      </div>
+      
+    );
+  }
+
 }
