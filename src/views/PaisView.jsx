@@ -1,5 +1,6 @@
 import React from 'react';
 import {PaisList} from '../components/PaisList';
+import {checkString} from '../utils/stringUtils';
 
 export class PaisView extends React.Component {
   constructor() {
@@ -44,27 +45,32 @@ export class PaisView extends React.Component {
 
   handleNewPaisSubmit = (e) => {
     e.preventDefault();
-    if( this.state.newPais.trim() === '')
+    if(checkString(this.state.newPais.trim()))
     {
-        return false;
+      this.addNewPais(e, this.state.newPais)
     }
-    this.addNewPais(e, this.state.newPais)
+    else {
+      alert('Ingrese un pais');
+    }
   }
 
   render() {
     return (
 
-      <div>
-        <form onSubmit={this.handleNewPaisSubmit}>
+    <div>
+      <form onSubmit={this.handleNewPaisSubmit}>
+        <div class="mb-3">
           <label>Pais:</label>
-          <input type="text" required value={this.state.newPais} onChange={(e) => this.handleNewPais(e)}></input>
-
-          <button type="submit">Agregar</button>
-        </form>
-        <ul>
+          <input type="text" class="form-control"  value={this.state.newPais} onChange={(e) => this.handleNewPais(e)}></input>
+        </div>
+        <div class="mb-3">
+          <button class="btn btn-primary" type="submit">Agregar</button>
+        </div>
+      </form>
           <PaisList paises={this.state.paises} onDeletePais= {this.deletePais}></PaisList>
-        </ul>
-      </div>
+    </div>
+    
+
     );
   }
 }

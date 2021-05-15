@@ -16,13 +16,13 @@ export const MainList = ({lista, onDeleteLista}) => {
                 </tr>
             </thead>
             <tbody>
-            {lista.map((lista, idx) => (
+            {lista.map((elem, idx) => (
                 <tr key={idx}>
                     <th scope="row">{idx}</th>
-                    <td>{lista.Puesto}</td>
-                    <td>{lista.Empresa}</td>
-                    <td>{lista.Ciudad}</td>
-                    <td>{lista.Pais}</td>
+                    <td>{elem.Puesto}</td>
+                    <td>{elem.Empresa}</td>
+                    <td>{elem.Ciudad}</td>
+                    <td>{elem.Pais}</td>
                     <td>
                     <Button onClick={() => onDeleteLista(idx)}>Eliminar</Button>
                     </td>
