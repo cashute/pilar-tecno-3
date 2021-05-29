@@ -1,6 +1,7 @@
 import React from 'react';
 import {PuestoList} from '../components/PuestoList';
 import {checkString} from '../utils/stringUtils';
+import {getPuesto, getEmpresa, postPuesto, deletePuesto} from '../clients/client';
 
 export class PuestosView extends React.Component {
   constructor() {
@@ -8,54 +9,61 @@ export class PuestosView extends React.Component {
     this.state = {
       puestos: [],
       newPuesto: "",
+      newDescripcion: "",
       empresas: [],
-      empresa: []
+      empresaId: []
     };
   }
 
   componentDidMount() {
-    this.setState({
-        puestos: localStorage.getItem('puestos') ? JSON.parse(localStorage.getItem('puestos')) : [],
-        empresas: localStorage.getItem('empresas') ? JSON.parse(localStorage.getItem('empresas')) : [],
+    getEmpresa().then(res => {
+      this.setState({empresas: res})
     });
+
+    getPuesto().then(res => {
+      this.setState({puestos: res})
+    });   
   }
 
-  componentDidUpdate(prevProps, prevState){
-    if(prevState.puestos !== this.state.puestos){
-        localStorage.setItem("puestos", JSON.stringify(this.state.puestos))
-    }
+  componentDidUpdate() {
+    getPuesto().then(res => {
+      this.setState({puestos: res})
+    });  
   }
 
-  addNewPuesto = (newEmpresa) => {
-    if (checkString(this.state.empresa.Empresa)){
-      this.setState({
-        puestos: [...this.state.puestos, {'Puesto': this.state.newPuesto, 'Empresa': this.state.empresa.Empresa, 'Ciudad': this.state.empresa.Ciudad, 'Pais': this.state.empresa.Pais, }],
+  addNewPuesto = () => {
+    if (checkString(this.state.empresaId)){
+      postPuesto(this.state.newPuesto, this.state.newDescripcion, this.state.empresaId).then(res => this.setState({
         newPuesto: '',
-        empresa:''
-    })}
+        newDescripcion: ''
+      }));}
       else {
         alert('Seleccione una empresa');
       }
-}
+  }
 
   deletePuesto = (id) => {
-    this.setState({
-      puestos: this.state.puestos.filter((_, idx) => idx !== id)
-    });
+    deletePuesto(id)
   }
 
   handleNewPuesto = (e) => {
     this.setState({
-        newPuesto: e.target.value,
+      newPuesto: e.target.value,
     });
   }
 
-    handleSelect = (e) => {
-        e.preventDefault();
-        this.setState({
-            empresa: JSON.parse(e.target.value),
-        });
-    };
+  handleNewDescripcion = (e) => {
+    this.setState({
+      newDescripcion: e.target.value,
+    });
+  }
+
+  handleSelect = (e) => {
+    e.preventDefault();
+    this.setState({
+      empresaId: e.target.value,
+    });
+  };
 
   handleNewPuestoSubmit = (e) => {
     e.preventDefault();
@@ -78,10 +86,14 @@ export class PuestosView extends React.Component {
           <input  type="text" class="form-control" id="" value={this.state.newPuesto} onChange={(e) => this.handleNewPuesto(e)} ></input>
         </div>
         <div class="mb-3">
-          <select class="form-select form-select-lg mb-3" id="inputGroupSelect01" onChange={(e) => this.handleSelect(e)} value={JSON.stringify(this.state.empresa)}>
-            <option value={JSON.stringify({})}>Seleccione Empresa</option>
+          <label class="form-label">Descripción:</label>
+          <input  type="text" class="form-control" id="" value={this.state.newDescripcion} onChange={(e) => this.handleNewDescripcion(e)} ></input>
+        </div>
+        <div class="mb-3">
+          <select class="form-select form-select-lg mb-3" id="inputGroupSelect01" onChange={(e) => this.handleSelect(e)} value={this.state.empresa}>
+            <option value=''>Seleccione Empresa</option>
               { this.state.empresas.map((empresa, index) => (
-                <option key={index+1} value={JSON.stringify(empresa)}>{empresa.Empresa}</option>
+                <option key={index+1} value={empresa.id}>{empresa.name}</option>
               ))}
           </select>
           </div>

@@ -6,20 +6,20 @@ export const PuestoList = ({puestos, onDeletePuesto}) => (
   <Table striped bordered hover>
       <thead>
           <tr>
-              <th>#</th>
+              <th>ID</th>
               <th>Puesto</th>
-              <th>Empresa</th>
+              <th>Descripción</th>
               <th>-</th>
           </tr>
       </thead>
       <tbody>
       {puestos.map((elem, idx) => (
           <tr key={idx}>
-              <th scope="row">{idx}</th>
-              <td>{elem.Puesto}</td>
-              <td>{elem.Empresa}</td>
+              <th scope="row">{elem.id}</th>
+              <td>{elem.position}</td>
+              <td>{elem.description}</td>
               <td>
-              <Button onClick={() => onDeletePuesto(idx)}>Eliminar</Button>
+              <Button onClick={() => onDeletePuesto(elem.id)}>Eliminar</Button>
               </td>
           </tr>
   ))}

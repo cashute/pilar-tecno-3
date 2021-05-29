@@ -19,7 +19,7 @@ export const MainList = ({lista, onDeleteLista}) => {
             {lista.map((elem, idx) => (
                 <tr key={idx}>
                     <th scope="row">{idx}</th>
-                    <td>{elem.Puesto}</td>
+                    <td>{elem.job.position}</td>
                     <td>{elem.Empresa}</td>
                     <td>{elem.Ciudad}</td>
                     <td>{elem.Pais}</td>

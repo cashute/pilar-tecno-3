@@ -46,6 +46,7 @@ import { PuestosView } from './views/PuestosView'
 
 
 const App = () => (
+<Router>
   <div className="App">
   <NavBarToDo />
   <div className="container">
@@ -59,6 +60,7 @@ const App = () => (
     </Switch>
   </div>
 </div>
+</Router>
 )
 
 export default App;
