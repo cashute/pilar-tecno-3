@@ -6,7 +6,7 @@ export const PaisList = ({paises, onDeletePais}) => (
   <Table striped bordered hover>
       <thead>
           <tr>
-              <th>#</th>
+              <th>ID</th>
               <th>Pais</th>
               <th>-</th>
           </tr>
@@ -14,10 +14,10 @@ export const PaisList = ({paises, onDeletePais}) => (
       <tbody>
       {paises.map((elem, idx) => (
           <tr key={idx}>
-              <th scope="row">{idx}</th>
-              <td>{elem.Pais}</td>
+              <th scope="row">{elem.id}</th>
+              <td>{elem.name}</td>
               <td>
-              <Button onClick={() => onDeletePais(idx)}>Eliminar</Button>
+              <Button onClick={() => onDeletePais(elem.id)}>Eliminar</Button>
               </td>
           </tr>
   ))}

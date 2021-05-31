@@ -1,6 +1,7 @@
 import React from 'react';
 import {PaisList} from '../components/PaisList';
 import {checkString} from '../utils/stringUtils';
+import {getPais, postPais, deletePais} from '../clients/Client';
 
 export class PaisView extends React.Component {
   constructor() {
@@ -12,28 +13,25 @@ export class PaisView extends React.Component {
   }
 
   componentDidMount() {
-    this.setState({
-        paises: localStorage.getItem('paises') ? JSON.parse(localStorage.getItem('paises')) : [],
-    });
+    getPais().then(res => {
+      this.setState({paises: res})
+    })    
+}
+
+  componentDidUpdate(){
+    getPais().then(res => {
+      this.setState({paises: res})
+    })    
   }
 
-  componentDidUpdate(prevProps, prevState){
-    if(prevState.paises !== this.state.paises){
-        localStorage.setItem('paises', JSON.stringify(this.state.paises))
-    }
-  }
-
-  addNewPais = (newPais) => {
-        this.setState({
-            paises: [...this.state.paises, {'Pais': this.state.newPais,}],
-            newPais: ''
-        });
+  addNewPais = () => {
+    postPais(this.state.newPais).then(res => this.setState({
+      newPais: ''
+    }))
   }
 
   deletePais = (id) => {
-    this.setState({
-      paises: this.state.paises.filter((_, idx) => idx !== id)
-    });
+    deletePais(id)
   }
 
   handleNewPais = (e) => {
@@ -56,7 +54,6 @@ export class PaisView extends React.Component {
 
   render() {
     return (
-
     <div>
       <form onSubmit={this.handleNewPaisSubmit}>
         <div class="mb-3">
@@ -69,8 +66,6 @@ export class PaisView extends React.Component {
       </form>
           <PaisList paises={this.state.paises} onDeletePais= {this.deletePais}></PaisList>
     </div>
-    
-
     );
   }
 }

@@ -1,6 +1,7 @@
 import React from 'react';
 import {EmpresaList} from '../components/EmpresaList';
 import {checkString} from '../utils/stringUtils';
+import {getEmpresa, getCiudad, postEmpresa, deleteEmpresa} from '../clients/Client';
 
 export class EmpresaView extends React.Component {
   constructor() {
@@ -9,39 +10,39 @@ export class EmpresaView extends React.Component {
       empresas: [],
       newEmpresa: "",
       ciudades: [],
-      ciudad: []
+      ciudadId: []
     };
   }
       
   componentDidMount() {
-    this.setState({
-        ciudades: localStorage.getItem('ciudades') ? JSON.parse(localStorage.getItem('ciudades')) : [],
-        empresas: localStorage.getItem('empresas') ? JSON.parse(localStorage.getItem('empresas')) : [],
-    });
-}
-
-  componentDidUpdate(prevProps, prevState){
-    if(prevState.empresas !== this.state.empresas){
-        localStorage.setItem("empresas", JSON.stringify(this.state.empresas))
-    }
+    getEmpresa().then(res => {
+        this.setState({empresas: res})
+    })   
+    
+    getCiudad().then(res => {
+          this.setState({ciudades: res})
+    })
   }
 
-  addNewEmpresa = (newEmpresa) => {
-    if (checkString(this.state.ciudad.Ciudad)){
-      this.setState({
-        empresas: [...this.state.empresas, {'Empresa': this.state.newEmpresa, 'Ciudad': this.state.ciudad.Ciudad, 'Pais': this.state.ciudad.Pais}],
+  componentDidUpdate(){
+    getEmpresa().then(res => {
+      this.setState({empresas: res})
+    }) 
+  }
+
+  addNewEmpresa = () => {
+    if (checkString(this.state.ciudadId)){
+      postEmpresa(this.state.newEmpresa, this.state.ciudadId).then(res => this.setState({
         newEmpresa: '',
-        ciudad:''
-    })}
+        ciudadId:''
+      }))}
       else {
         alert('Seleccione una ciudad');
       }
-}
+  }
 
   deleteEmpresa = (id) => {
-    this.setState({
-      empresas: this.state.empresas.filter((_, idx) => idx !== id)
-    });
+    deleteEmpresa(id)
   }
 
   handleNewEmpresa = (e) => {
@@ -53,7 +54,7 @@ export class EmpresaView extends React.Component {
 	handleSelect = (e) => {
 		e.preventDefault();
 		this.setState({
-			  ciudad: JSON.parse(e.target.value),
+			ciudadId: e.target.value,
 		});
 	};
 
@@ -77,10 +78,10 @@ export class EmpresaView extends React.Component {
             <input class="form-control" type="text"  value={this.state.newEmpresa} onChange={(e) => this.handleNewEmpresa(e)}></input>
           </div>
           <div class="mb-3">
-            <select class="form-select form-select-lg mb-3" id="inputGroupSelect01" onChange={(e) => this.handleSelect(e)} value={JSON.stringify(this.state.ciudad)}>
-						  <option value={JSON.stringify({})}>Seleccione Ciudad</option>
-                        { this.state.ciudades.map((ciudad, index) => (
-                            <option key={index+1} value={JSON.stringify(ciudad)}>{ciudad.Ciudad}</option>
+            <select class="form-select form-select-lg mb-3" id="inputGroupSelect01" onChange={(e) => this.handleSelect(e)} value={this.state.ciudad}>
+						  <option value=''>Seleccione Ciudad</option>
+                        { this.state.ciudades.map((elem, index) => (
+                            <option key={index+1} value={elem.id}>{elem.name}</option>
                         ))}
 					  </select> 
           </div>
@@ -88,7 +89,7 @@ export class EmpresaView extends React.Component {
             <button type="submit" class="btn btn-primary">Agregar</button>
           </div>         
         </form>
-          <EmpresaList empresas={this.state.empresas} onDeleteEmpresa= {this.deleteEmpresa}></EmpresaList>
+          <EmpresaList empresas={this.state.empresas} ciudades={this.state.ciudades} onDeleteEmpresa= {this.deleteEmpresa}></EmpresaList>
       </div>
     );
   }
