@@ -1,10 +1,10 @@
 import React from 'react';
 import { MainList } from '../components/MainList';
-import {getPuesto, getData, getEmpresa, postTrabajo} from '../clients/client';
+import { getData, deletePuesto } from '../clients/Client';
 
 export class MainView extends React.Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
     this.state = {
       lista: []
     };
@@ -12,7 +12,6 @@ export class MainView extends React.Component {
 
   componentDidMount() {   
     getData().then(res => {
-      // this.setState(JSON.parse({lista: res}))
       this.setState({lista: res})
     })
   }
@@ -29,17 +28,16 @@ export class MainView extends React.Component {
   //   }
   // }
 
-  // deleteLista = (id) => {
-  //   this.setState({
-  //     lista: this.state.lista.filter((_, idx) => idx !== id)
-  //   });
-  // }
+  deleteLista = (id) => {
+    deletePuesto(id)
+  }
 
   render() {
     return (
+
       <div>
-        
-        {/* <MainList lista={this.state.lista} onDeleteLista={this.deleteLista} /> */}
+        {console.log(this.state.lista)}
+        <MainList lista={this.state.lista} onDeleteLista={this.deleteLista} />
       
       </div>
       

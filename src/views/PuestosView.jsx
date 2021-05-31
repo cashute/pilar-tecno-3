@@ -1,7 +1,7 @@
 import React from 'react';
 import {PuestoList} from '../components/PuestoList';
 import {checkString} from '../utils/stringUtils';
-import {getPuesto, getEmpresa, postPuesto, deletePuesto} from '../clients/client';
+import {getPuesto, getEmpresa, postPuesto, deletePuesto} from '../clients/Client';
 
 export class PuestosView extends React.Component {
   constructor() {

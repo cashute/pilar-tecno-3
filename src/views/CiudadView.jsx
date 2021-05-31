@@ -1,7 +1,7 @@
 import React from 'react';
 import {CiudadList} from '../components/CiudadList';
 import {checkString} from '../utils/stringUtils';
-import {getPais, getCiudad, postCiudad, deleteCiudad } from '../clients/client';
+import {getPais, getCiudad, postCiudad, deleteCiudad } from '../clients/Client';
 
 export class CiudadView extends React.Component {
   constructor() {
@@ -42,7 +42,7 @@ export class CiudadView extends React.Component {
   }
 
   deleteCiudad = (id) => {
-    deleteCiudad(id)  
+    deleteCiudad(id) 
   }
 
   handleNewCiudad = (e) => {
@@ -89,7 +89,7 @@ export class CiudadView extends React.Component {
             <button type="submit" class="btn btn-primary">Agregar</button>
           </div>    
         </form>
-          <CiudadList ciudades={this.state.ciudades} onDeleteCiudad= {this.deleteCiudad}></CiudadList>
+          <CiudadList paises={this.state.paises} ciudades={this.state.ciudades} onDeleteCiudad= {this.deleteCiudad}></CiudadList>
       </div>
     );
   }

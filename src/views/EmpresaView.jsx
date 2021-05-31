@@ -1,7 +1,7 @@
 import React from 'react';
 import {EmpresaList} from '../components/EmpresaList';
 import {checkString} from '../utils/stringUtils';
-import {getEmpresa, getCiudad, postEmpresa, deleteEmpresa} from '../clients/client';
+import {getEmpresa, getCiudad, postEmpresa, deleteEmpresa} from '../clients/Client';
 
 export class EmpresaView extends React.Component {
   constructor() {
@@ -89,7 +89,7 @@ export class EmpresaView extends React.Component {
             <button type="submit" class="btn btn-primary">Agregar</button>
           </div>         
         </form>
-          <EmpresaList empresas={this.state.empresas} onDeleteEmpresa= {this.deleteEmpresa}></EmpresaList>
+          <EmpresaList empresas={this.state.empresas} ciudades={this.state.ciudades} onDeleteEmpresa= {this.deleteEmpresa}></EmpresaList>
       </div>
     );
   }

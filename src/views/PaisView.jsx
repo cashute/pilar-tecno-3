@@ -1,7 +1,7 @@
 import React from 'react';
 import {PaisList} from '../components/PaisList';
 import {checkString} from '../utils/stringUtils';
-import {getPais, postPais, deletePais} from '../clients/client';
+import {getPais, postPais, deletePais} from '../clients/Client';
 
 export class PaisView extends React.Component {
   constructor() {
